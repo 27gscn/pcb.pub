@@ -8,14 +8,14 @@
 
 | 文件 | 用途 |
 | --- | --- |
-| `index.html` | 首页：名称查询、两种解析方式、站点状态 |
+| `index.html` | 首页：名称查询、两种解析方式、入住步骤 |
 | `apply.html` | 申请入住：步骤说明、邮件模板、常见问题 |
 | `rules.html` | 使用规则 |
 | `404.html` | 找不到页面 |
 | `assets/config.js` | **日常配置**：邮箱、保留名称、审核中名称、统计、在线人数、信鸽 |
 | `assets/lang.js` | 多语言核心：识别浏览器语言、切换语言、按需加载译文 |
 | `assets/i18n/*.js` | 11 种外语译文，每种语言一个文件（简体中文直接写在 HTML 里） |
-| `assets/main.js` | 页面功能：名称查询、邮件模板、运行时间、公历/农历日期、统计、在线人数、信鸽 |
+| `assets/main.js` | 页面功能：名称查询、邮件模板、建站日期与运行天数、统计、在线人数、信鸽 |
 | `assets/vendor/supabase.js` | 实时在线人数用的 supabase-js 库（官方文件，不用改） |
 | `assets/style.css` | 样式 |
 | `assets/logo.svg`、`assets/icon.svg`、`assets/icon-180.png`、`favicon.ico` | 标志与图标：航空信封造型，深蓝 `#0c3a85` + 航空邮件红 `#c2463a` |
@@ -113,7 +113,7 @@ DNS → Records → **Add record**：
 ```text
 你好！yourname.pcb.pub 已开通（CNAME → yourname.github.io）。
 
-有效期：2026-10-05 至 2031-10-05。到期前用本邮箱来信即可免费续期，每次 5 年。
+有效期：2026-10-05 至 2031-10-05。到期前 30 天左右我们会发邮件提醒，用本邮箱来信即可免费续期，每次 5 年。
 解析通常几分钟内生效，之后请在托管平台开启 HTTPS。
 更换服务器、修改或注销，也请用本邮箱来信。
 使用规则：https://pcb.pub/rules.html
@@ -132,6 +132,17 @@ DNS → Records → **Add record**：
 信鸽子寻址 · PCB.PUB
 ```
 
+续期提醒（到期前 30 天左右发到申请邮箱）：
+
+```text
+你好！yourname.pcb.pub 将于 2031-10-05 到期。
+
+还要继续使用的话，直接回复这封邮件即可免费续期 5 年。
+不再需要的话可以不用回复，到期后我们会删除解析，名称重新开放申请。
+
+信鸽子寻址 · PCB.PUB
+```
+
 ## 四、台账
 
 开通的每个子域名都记一笔。台账含申请人邮箱，**只存在自己电脑或私密文档里，不要放进这个公开仓库**。
@@ -144,7 +155,8 @@ DNS → Records → **Add record**：
 
 ## 五、日常维护
 
-- **续期**：只处理原申请邮箱的来信。到期日从原到期日顺延 5 年，回信确认。建议到期前 30 天发一封提醒。
+- **续期提醒**：使用规则里写明了“到期前 30 天左右会邮件提醒”。开通时就在日历里记一个提醒（到期日前 30 天），到时用上面的模板发到申请邮箱。
+- **续期**：只处理原申请邮箱的来信。到期日从原到期日顺延 5 年，回信确认。
 - **到期未续期**：删除记录，名称重新开放申请。
 - **修改、注销、换 IP**：只处理原申请邮箱的来信，在 Cloudflare 里编辑或删除对应记录。
 - **定期巡检**（每 1–3 个月）：逐个打开子域名。连续 30 天打不开的，邮件通知后删除记录。
@@ -158,7 +170,7 @@ DNS → Records → **Add record**：
 | 设置 | 说明 |
 | --- | --- |
 | `email` | 申请与举报邮箱。网页正文里也写着这个邮箱，换邮箱时请在所有文件里搜索 `tyzpkaw@163.com` 并替换 |
-| `launch` | 建站时间（北京时间），用于“已稳定运行”计时和公历/农历“建站于” |
+| `launch` | 建站时间（北京时间），用于页脚的“建站于”日期和“已运行 N 天” |
 | `reserved` | 保留名称。查询时提示“不开放申请”，申请页会自动列出 |
 | `pending` | 审核中的名称。查询时提示“正在审核中”，页面上不列出。这是公开文件，只写名称，不写申请人信息 |
 | `statsScript` | 访问统计脚本地址，留空 `""` 即关闭 |
@@ -167,7 +179,7 @@ DNS → Records → **Add record**：
 
 ## 七、访问统计
 
-使用 [Vercount](https://vercount.one/)，免注册、免费，兼容不蒜子的页面元素。部署到 `pcb.pub` 后自动开始计数，首页“站点状态”和页脚显示全站浏览量与访客数。统计服务暂时连不上时，统计块会自动隐藏。
+使用 [Vercount](https://vercount.one/)，免注册、免费，兼容不蒜子的页面元素。部署到 `pcb.pub` 后自动开始计数，页脚显示全站浏览量与访客数。统计服务暂时连不上时，统计块会自动隐藏。
 
 - 不蒜子（`busuanzi.ibruce.info`）目前经常连不上，所以没有用它。以后想换回去，把 `statsScript` 改成 `https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js` 即可，不用改 HTML。
 - 换统计服务后计数会从头开始。
@@ -176,7 +188,7 @@ DNS → Records → **Add record**：
 
 用 Supabase 的 Realtime 功能统计同时在线的访客，免费，不需要建表。
 
-**已开启**：项目地址 `https://jovexnhdmggmznfprthc.supabase.co`，`config.js` 里已填好 Project URL 和 Publishable key。首页“站点状态”和页脚会显示“在线”人数，同一位访客开多个标签页只算 1 人。连不上 Supabase 时，30 秒后自动放弃，“在线”会隐藏，不影响页面其他功能。
+**已开启**：项目地址 `https://jovexnhdmggmznfprthc.supabase.co`，`config.js` 里已填好 Project URL 和 Publishable key。页脚会显示“在线”人数，同一位访客开多个标签页只算 1 人。连不上 Supabase 时，30 秒后自动放弃，“在线”会隐藏，不影响页面其他功能。
 
 以后要换项目或重新创建，按下面的步骤：
 
@@ -184,10 +196,10 @@ DNS → Records → **Add record**：
 2. 项目创建好后，复制两样东西：
    - **Project URL**：形如 `https://xxxx.supabase.co`（项目首页的 Connect，或 Project Settings → Data API）。
    - **Publishable key**：以 `sb_publishable_` 开头（Project Settings → API Keys）。旧项目也可以用 Legacy API Keys 里的 `anon` `public` key。
-3. 填进 `config.js` 的 `supabaseUrl` 和 `supabaseKey`，提交。刷新首页，“当前在线”就会出现。连接用的 supabase-js 已放在 `assets/vendor/supabase.js`，不依赖外部 CDN。
+3. 填进 `config.js` 的 `supabaseUrl` 和 `supabaseKey`，提交。刷新首页，页脚的“在线”就会出现。连接用的 supabase-js 已放在 `assets/vendor/supabase.js`，不依赖外部 CDN。
 4. **绝对不要填 `service_role` 或 secret key**，它们有完整的数据库权限，而 `config.js` 是公开的。
 5. 一直不显示的话，到 Supabase 的 **Realtime → Settings**，确认允许公开频道（Allow public access）是开启的。
-6. 免费项目长时间没有活动可能会被暂停。暂停期间“当前在线”自动隐藏，到 Supabase 后台恢复项目即可。
+6. 免费项目长时间没有活动可能会被暂停。暂停期间页脚的“在线”自动隐藏，到 Supabase 后台恢复项目即可。
 
 ## 九、多语言
 

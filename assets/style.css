@@ -16,8 +16,9 @@
   --radius: 8px;
   --radius-lg: 12px;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.04);
-  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
-    "Microsoft YaHei", "Noto Sans SC", "Noto Sans CJK SC", sans-serif;
+  /* 中文字体放在前面，引号、省略号等标点才会按全角显示 */
+  --font: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Noto Sans CJK SC",
+    "Source Han Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
   color-scheme: light;
 }
@@ -223,21 +224,14 @@ code {
   padding-left: 14px;
   border-left: 1px solid var(--border-strong);
   color: var(--text);
-  font-family: "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "SimHei", "Noto Sans SC",
-    "Noto Sans CJK SC", sans-serif;
   font-size: 21px;
   font-weight: 700;
   letter-spacing: 0.04em;
   line-height: 28px;
 }
 
-html:lang(zh-TW) .brand-sub {
-  font-family: "PingFang TC", "Heiti TC", "Microsoft JhengHei", "Noto Sans TC", "Noto Sans CJK TC", sans-serif;
-}
-
-/* 其他语言这里是“子域名服务”之类的说明文字，用各自语言的字体，字号略小 */
+/* 其他语言这里是“子域名服务”之类的说明文字，字号略小 */
 html:not(:lang(zh)) .brand-sub {
-  font-family: var(--font);
   font-size: 17px;
   letter-spacing: 0;
 }
@@ -442,6 +436,12 @@ html:not(:lang(zh)) .brand-sub {
 .hero-meta span::after {
   content: "·";
   margin: 0 8px;
+}
+
+html:lang(zh) .hero-meta span::after,
+html:lang(ja) .hero-meta span::after {
+  content: "・";
+  margin: 0;
 }
 
 .hero-meta a {
@@ -970,110 +970,7 @@ html:not(:lang(zh)) .brand-sub {
   overflow-wrap: anywhere;
 }
 
-/* ---------- Status ---------- */
-
-.status-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.status-card {
-  display: flex;
-  flex: 1 1 200px;
-  flex-direction: column;
-  min-width: 0;
-  padding: 24px;
-  background: var(--canvas);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-}
-
-.status-card--runtime {
-  flex: 2 1 340px;
-  background: var(--ink);
-  border-color: var(--ink);
-  color: #fff;
-}
-
-.status-label {
-  display: flex;
-  align-items: center;
-  margin: 0 0 12px;
-  color: var(--muted);
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.status-card--runtime .status-label {
-  color: rgba(255, 255, 255, 0.82);
-}
-
-.runtime {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 4px 14px;
-  margin: 0;
-}
-
-.rt b {
-  font-family: var(--mono);
-  font-size: 40px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  line-height: 1.1;
-}
-
-.rt small {
-  margin-left: 4px;
-  font-size: 15px;
-  opacity: 0.85;
-}
-
-.status-value {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 1.35;
-}
-
-.status-value small {
-  color: var(--muted);
-  font-size: 15px;
-  font-weight: 500;
-}
-
-.status-foot {
-  margin: auto 0 0;
-  padding-top: 14px;
-  color: var(--muted);
-  font-size: 14px;
-}
-
-.status-card--runtime .status-foot {
-  color: rgba(255, 255, 255, 0.86);
-}
-
-.stat-pair {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin: 0;
-}
-
-.stat-pair dt {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.stat-pair dd {
-  margin: 0;
-  font-family: var(--mono);
-  font-size: 22px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
+/* ---------- Live dot ---------- */
 
 .live-dot {
   display: inline-block;
@@ -1243,24 +1140,36 @@ html:not(:lang(zh)) .brand-sub {
   border-top: 1px solid var(--border);
 }
 
+/* 每项前面都有间隔号；整行左移 20px 再裁掉这 20px，换行后行首就不会露出间隔号 */
 .footer-status {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: baseline;
   gap: 4px 0;
-  margin: 0;
+  margin: 0 0 0 -20px;
+  clip-path: inset(-12px -12px -12px 20px);
 }
 
+/* 按文字基线对齐，等宽数字才不会上下错位 */
 .footer-status > span {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: 4px;
 }
 
-.footer-status > span + span::before {
+.footer-status > span::before {
   content: "·";
-  margin: 0 8px 0 6px;
+  flex: none;
+  width: 20px;
+  margin-right: -4px;
   color: var(--border-strong);
+  text-align: center;
+}
+
+/* 中文、日文用全角间隔号 */
+html:lang(zh) .footer-status > span::before,
+html:lang(ja) .footer-status > span::before {
+  content: "・";
 }
 
 .footer-status b {
@@ -1269,7 +1178,12 @@ html:not(:lang(zh)) .brand-sub {
   font-weight: 600;
 }
 
+.footer-status b.footer-date {
+  font-family: inherit;
+}
+
 .footer-status .live-dot {
+  align-self: center;
   margin-right: 2px;
 }
 
@@ -1823,8 +1737,8 @@ html:lang(ru) li {
 }
 
 html:lang(zh-TW) {
-  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei",
-    "Noto Sans TC", "Noto Sans CJK TC", sans-serif;
+  --font: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", "Noto Sans CJK TC", "Source Han Sans TC",
+    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 /* ---------- Responsive ---------- */
@@ -2063,14 +1977,6 @@ html:lang(zh-TW) {
 
   .option-grid {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .rt b {
-    font-size: 30px;
-  }
-
-  .status-card {
-    padding: 20px;
   }
 
   .steps {

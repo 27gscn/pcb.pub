@@ -1,6 +1,6 @@
 /*
  * PCB.PUB 页面脚本
- * 子域名查询 · 邮件模板 · 运行时间 · 公历/农历 · 访问统计 · 在线人数 · 信鸽
+ * 子域名查询 · 邮件模板 · 建站日期与运行天数 · 访问统计 · 在线人数 · 信鸽
  * 日常配置请改 assets/config.js，这里一般不用动。
  */
 (function () {
@@ -345,71 +345,7 @@
     });
   }
 
-  /* ---------- 运行时间 · 公历 · 农历 ---------- */
-
-  var STEMS = "甲乙丙丁戊己庚辛壬癸";
-  var BRANCHES = "子丑寅卯辰巳午未申酉戌亥";
-  var MONTHS = "正二三四五六七八九十冬腊";
-  var DIGITS = "一二三四五六七八九十";
-  var lunarFormats = {};
-
-  function lunarDay(n) {
-    if (n === 10) return "初十";
-    if (n === 20) return "二十";
-    if (n === 30) return "三十";
-    return "初十廿三".charAt(Math.floor(n / 10)) + DIGITS.charAt((n - 1) % 10);
-  }
-
-  function lunar(date, timeZone) {
-    try {
-      var key = timeZone || "local";
-      var format = lunarFormats[key] || (lunarFormats[key] = new Intl.DateTimeFormat("en-u-ca-chinese", {
-        timeZone: timeZone, year: "numeric", month: "numeric", day: "numeric"
-      }));
-      var parts = {};
-      format.formatToParts(date).forEach(function (p) { parts[p.type] = p.value; });
-      var year = parseInt(parts.relatedYear || parts.year, 10);
-      var month = parseInt(parts.month, 10);
-      var day = parseInt(parts.day, 10);
-      if (!(year > 1000 && month >= 1 && month <= 12 && day >= 1 && day <= 30)) return null;
-      return { year: year, month: month, day: day, leap: /\D/.test(parts.month) };
-    } catch (e) {
-      return null;
-    }
-  }
-
-  function lunarText(date, timeZone) {
-    var l = lunar(date, timeZone);
-    if (!l) return "";
-    var cycle = (l.year - 4) % 60;
-    var ganzhi = STEMS.charAt(cycle % 10) + BRANCHES.charAt(cycle % 12);
-    var lang = I18N.lang;
-    var fmt = t("lunar.fmt", null);
-    if (fmt) {
-      // 其他语言：按语言文件里的 lunar.* 格式拼出农历
-      var list = function (key) {
-        var value = t(key, "");
-        return value ? String(value).split(",") : [];
-      };
-      var stems = list("lunar.stems");
-      var branches = list("lunar.branches");
-      var gz = stems.length === 10 && branches.length === 12
-        ? stems[cycle % 10] + (t("lunar.gzSep", "") || "") + branches[cycle % 12]
-        : ganzhi;
-      var month = String(t(l.leap ? "lunar.leap" : "lunar.month", "{m}")).replace("{m}", l.month);
-      return String(fmt)
-        .replace("{month}", month)
-        .replace("{d}", l.day)
-        .replace("{animal}", list("lunar.animals")[cycle % 12] || "")
-        .replace("{gz}", gz);
-    }
-    if (lang === "ja") {
-      return "旧暦 " + ganzhi + "年" + (l.leap ? "閏" : "") + l.month + "月" + l.day + "日";
-    }
-    var tw = lang === "zh-TW";
-    var month = tw && l.month === 12 ? "臘" : MONTHS.charAt(l.month - 1);
-    return (tw ? "農曆" : "农历") + ganzhi + "年" + (l.leap ? (tw ? "閏" : "闰") : "") + month + "月" + lunarDay(l.day);
-  }
+  /* ---------- 建站日期与运行天数 ---------- */
 
   function solar(date, timeZone, options) {
     try {
@@ -421,38 +357,15 @@
     }
   }
 
+  // 页脚：建站日期（按北京时间显示）和已运行天数
   function renderDates() {
-    var now = new Date();
-    var launch = new Date(LAUNCH);
-    var long = { year: "numeric", month: "long", day: "numeric" };
-    setText("[data-launch-solar]", solar(launch, "Asia/Shanghai", long));
-    var launchLunar = lunarText(launch, "Asia/Shanghai");
-    setText("[data-launch-lunar]", launchLunar ? " · " + launchLunar : "");
-    setText("[data-today-solar]", solar(now, undefined, long));
-    setText("[data-today-week]", solar(now, undefined, { weekday: "long" }));
-    setText("[data-today-lunar]", lunarText(now));
+    setText("[data-launch-solar]", solar(new Date(LAUNCH), "Asia/Shanghai", { year: "numeric", month: "long", day: "numeric" }));
+    tick();
   }
-
-  function pad(n) {
-    return (n < 10 ? "0" : "") + n;
-  }
-
-  var lastDay = "";
 
   function tick() {
-    var now = new Date();
-    var secs = Math.max(0, Math.floor((now.getTime() - LAUNCH) / 1000));
-    var days = Math.floor(secs / 86400);
-    setText('[data-rt="d"]', num(days));
-    setText('[data-rt="h"]', pad(Math.floor((secs % 86400) / 3600)));
-    setText('[data-rt="m"]', pad(Math.floor((secs % 3600) / 60)));
-    setText('[data-rt="s"]', pad(secs % 60));
+    var days = Math.max(0, Math.floor((Date.now() - LAUNCH) / 86400000));
     setText("[data-days]", num(days));
-    var day = now.toDateString();
-    if (day !== lastDay) {
-      lastDay = day;
-      renderDates();
-    }
   }
 
   /* ---------- 访问统计（Vercount，沿用不蒜子的元素 id） ---------- */
@@ -652,8 +565,7 @@
   initStats();
   initOnline();
   renderAll();
-  tick();
-  setInterval(tick, 1000);
+  setInterval(tick, 60000);
   on("pcb:lang", renderAll);
   var fitTimer = 0;
   window.addEventListener("resize", function () {
@@ -662,5 +574,5 @@
   });
   pigeons();
 
-  window.PCB_TEST = { clean: clean, problem: problem, judge: judge, lunarText: lunarText, lunarDay: lunarDay };
+  window.PCB_TEST = { clean: clean, problem: problem, judge: judge };
 })();

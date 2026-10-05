@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title data-i18n="home.title">PCB.PUB · 信鸽子寻址 · 免费子域名</title>
+  <title data-i18n="home.title">PCB.PUB・信鸽子寻址・免费子域名</title>
   <meta name="description" content="PCB.PUB（信鸽子寻址）是非营利项目，免费提供 pcb.pub 子域名：人工审核，有效期 5 年，支持 CNAME 与 IPv4 解析，网站由你自己托管。">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://pcb.pub/">
-  <meta property="og:title" content="PCB.PUB · 信鸽子寻址 · 免费子域名">
+  <meta property="og:title" content="PCB.PUB・信鸽子寻址・免费子域名">
   <meta property="og:description" content="PCB.PUB（信鸽子寻址）是非营利项目，免费提供 pcb.pub 子域名：人工审核，有效期 5 年，支持 CNAME 与 IPv4 解析，网站由你自己托管。">
   <meta name="theme-color" content="#0a2b61">
   <link rel="icon" href="favicon.ico" sizes="32x32">
@@ -63,7 +63,7 @@
     <section class="hero">
       <div class="container">
         <div class="hero-copy">
-          <p class="eyebrow" data-i18n="hero.eyebrow">子域名服务 · 人工审核</p>
+          <p class="eyebrow" data-i18n="hero.eyebrow">子域名服务・人工审核</p>
           <h1 data-i18n-html="hero.h1">给每个网络站点，<br>一个可以到达的地址</h1>
           <p class="lead" data-i18n-html="hero.lead">信鸽子寻址免费提供 <span class="mono nowrap">你的名字.pcb.pub</span> 子域名，通过 CNAME 或 IPv4 指向你自己托管的网站。每份申请都由人工审核。</p>
           <form class="checker" action="apply.html#name" method="get" novalidate data-checker>
@@ -78,12 +78,12 @@
             <p class="checker-hint" id="check-hint" data-i18n="chk.hint">3 位及以上（最多 32 位），可用小写字母、数字或连字符</p>
             <div class="checker-result" role="status" aria-live="polite" data-check-result></div>
           </form>
-          <p class="hero-meta"><span data-i18n="hero.meta">非营利项目 · 子域名 3 位及以上 · 一次申请 5 年有效</span><a href="rules.html" data-i18n="hero.rules">查看使用规则</a></p>
+          <p class="hero-meta"><span data-i18n="hero.meta">非营利项目・子域名 3 位及以上・一次申请 5 年有效</span><a href="rules.html" data-i18n="hero.rules">查看使用规则</a></p>
         </div>
 
         <div class="envelope" aria-hidden="true">
           <div class="envelope-body">
-            <p class="envelope-from" data-i18n="env.from">寄自 · 信鸽子寻址</p>
+            <p class="envelope-from" data-i18n="env.from">寄自・信鸽子寻址</p>
             <div class="stamp">
               <div class="stamp-paper">
                 <div class="stamp-inner">
@@ -109,7 +109,7 @@
               <div class="address-line"></div>
               <div class="tag-row">
                 <span class="tag" data-i18n="tag.review">人工审核</span>
-                <span class="tag">CNAME / IPv4</span>
+                <span class="tag" data-i18n="tag.dns">CNAME／IPv4</span>
                 <span class="tag" data-i18n="tag.len">子域名 3 位及以上</span>
                 <span class="tag" data-i18n="tag.hosted">网站由你托管</span>
               </div>
@@ -184,47 +184,7 @@
       </div>
     </section>
 
-    <section class="section" id="status" aria-labelledby="status-title" data-js>
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <h2 id="status-title" data-i18n="status.title">站点状态</h2>
-            <p data-i18n="status.sub">从建站那天起，信鸽每天都在路上。</p>
-          </div>
-        </div>
-        <div class="status-grid">
-          <article class="status-card status-card--runtime">
-            <p class="status-label" data-i18n="status.runtime">已稳定运行</p>
-            <p class="runtime">
-              <span class="rt"><b data-rt="d">0</b><small data-i18n="rt.d">天</small></span>
-              <span class="rt"><b data-rt="h">00</b><small data-i18n="rt.h">时</small></span>
-              <span class="rt"><b data-rt="m">00</b><small data-i18n="rt.m">分</small></span>
-              <span class="rt"><b data-rt="s">00</b><small data-i18n="rt.s">秒</small></span>
-            </p>
-            <p class="status-foot"><span data-i18n="status.since">建站于</span> <span data-launch-solar>2026年10月5日</span><span data-launch-lunar></span></p>
-          </article>
-          <article class="status-card">
-            <p class="status-label" data-i18n="status.today">今天</p>
-            <p class="status-value" data-today-solar>—</p>
-            <p class="status-foot"><span data-today-week></span><br><span data-today-lunar></span></p>
-          </article>
-          <article class="status-card" data-stats>
-            <p class="status-label" data-i18n="status.visits">访问统计</p>
-            <dl class="stat-pair">
-              <div><dt data-i18n="stat.pv">浏览</dt><dd data-stat="pv">—</dd></div>
-              <div><dt data-i18n="stat.uv">访客</dt><dd data-stat="uv">—</dd></div>
-            </dl>
-          </article>
-          <article class="status-card" data-online hidden>
-            <p class="status-label"><i class="live-dot" aria-hidden="true"></i><span data-i18n="status.online">当前在线</span></p>
-            <p class="status-value"><span data-stat="online">—</span> <small data-i18n="status.people">人</small></p>
-            <p class="status-foot" data-i18n="status.live">实时更新</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-paper" aria-labelledby="how-title">
+    <section class="section" aria-labelledby="how-title">
       <div class="container">
         <div class="section-head">
           <div>
@@ -285,6 +245,7 @@
       </div>
       <div class="footer-bottom">
         <p class="footer-status" data-js>
+          <span><span data-i18n="status.since">建站于</span> <b class="footer-date" data-launch-solar>2026年10月5日</b></span>
           <span><span data-i18n="stat.running">已运行</span> <b data-days>0</b> <span data-i18n="stat.days">天</span></span>
           <span data-stats><span data-i18n="stat.pv">浏览</span> <b data-stat="pv">—</b></span>
           <span data-stats><span data-i18n="stat.uv">访客</span> <b data-stat="uv">—</b></span>
