@@ -121,15 +121,17 @@ code {
   color: #fff;
 }
 
+/* 页边距：--gutter 是左右留白，正文最宽 1040px（使用规则等长文最宽 720px），屏幕越宽两边留白越多 */
 .container {
+  --gutter: clamp(28px, 7vw, 112px);
   width: 100%;
-  max-width: 1240px;
+  max-width: calc(1040px + var(--gutter) * 2);
   margin: 0 auto;
-  padding: 0 clamp(24px, 5vw, 64px);
+  padding: 0 var(--gutter);
 }
 
 .container-narrow {
-  max-width: 760px;
+  max-width: calc(720px + var(--gutter) * 2);
 }
 
 /* ---------- Header ---------- */
@@ -1873,7 +1875,7 @@ html:lang(zh-TW) {
 
 @media (max-width: 640px) {
   .container {
-    padding: 0 24px;
+    --gutter: 28px;
   }
 
   .topbar .container {
@@ -2115,17 +2117,31 @@ html:lang(zh-TW) {
   }
 }
 
-/* 韩文按词换行，两栏布局时第二行容易被挤到第三行：标题随宽度略缩 */
+/* 两栏布局时，首屏标题随宽度缩放，保证各语言都在两行内（韩文按词换行，单独设置） */
 @media (min-width: 901px) {
+  .hero h1 {
+    font-size: clamp(38px, 4.4vw, 48px);
+  }
+
+  :is(html:lang(en), html:lang(fr), html:lang(de), html:lang(es), html:lang(pt), html:lang(it), html:lang(ru), html:lang(vi)) .hero h1 {
+    font-size: clamp(29px, 3.05vw, 41px);
+  }
+
   html:lang(ko) .hero h1 {
-    font-size: clamp(36px, 3.9vw, 48px);
+    font-size: clamp(34px, 3.8vw, 46px);
   }
 }
 
-/* 窄平板上“信鸽子寻址”略小一点，给导航留出空间 */
+/* 窄平板上“信鸽子寻址”略小一点，再窄就隐藏，给导航留出空间 */
 @media (max-width: 760px) {
   .brand-sub {
     font-size: 18px;
+  }
+}
+
+@media (max-width: 720px) {
+  .brand-sub {
+    display: none;
   }
 }
 
@@ -2160,11 +2176,11 @@ html:lang(zh-TW) {
 
 @media (max-width: 360px) {
   .container {
-    padding: 0 20px;
+    --gutter: 24px;
   }
 }
 
-@media (max-width: 359px) {
+@media (max-width: 374px) {
   .brand-logo {
     height: 24px;
   }
@@ -2180,7 +2196,7 @@ html:lang(zh-TW) {
 
 @media (max-width: 340px) {
   .container {
-    padding: 0 16px;
+    --gutter: 16px;
   }
 }
 
