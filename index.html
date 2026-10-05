@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="home.title">PCB.PUB · 信鸽子寻址 · 免费子域名</title>
+  <meta name="description" content="PCB.PUB（信鸽子寻址）是非营利项目，免费提供 pcb.pub 子域名：人工审核，有效期 5 年，支持 CNAME 与 IPv4 解析，网站由你自己托管。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pcb.pub/">
+  <meta property="og:title" content="PCB.PUB · 信鸽子寻址 · 免费子域名">
+  <meta property="og:description" content="PCB.PUB（信鸽子寻址）是非营利项目，免费提供 pcb.pub 子域名：人工审核，有效期 5 年，支持 CNAME 与 IPv4 解析，网站由你自己托管。">
+  <meta name="theme-color" content="#0a2b61">
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icon-180.png">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/config.js"></script>
+  <script src="assets/lang.js"></script>
+  <script src="assets/main.js" defer></script>
+</head>
+<body data-page="home">
+  <a class="skip-link" href="#main" data-i18n="skip">跳到正文</a>
+
+  <header class="site-header">
+    <div class="topbar">
+      <div class="container">
+        <p class="provider"><span data-i18n="top.by">提供方：</span><a href="https://27.gs.cn/" target="_blank" rel="noopener">27.GS.CN<svg class="ext" viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 10.5 10.5 5.5M6.5 5.5h4v4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
+        <label class="lang-switch">
+          <span class="sr-only" data-i18n="lang.label">语言</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.6 3.6 5.6 3.6 9s-1.2 6.4-3.6 9c-2.4-2.6-3.6-5.6-3.6-9S9.6 5.6 12 3z"/></svg>
+          <select data-lang-select>
+            <option value="zh-CN" lang="zh-CN">简体中文</option>
+            <option value="zh-TW" lang="zh-TW">繁體中文</option>
+            <option value="en" lang="en">English</option>
+            <option value="ja" lang="ja">日本語</option>
+            <option value="ko" lang="ko">한국어</option>
+            <option value="fr" lang="fr">Français</option>
+            <option value="de" lang="de">Deutsch</option>
+            <option value="es" lang="es">Español</option>
+            <option value="pt" lang="pt">Português</option>
+            <option value="it" lang="it">Italiano</option>
+            <option value="ru" lang="ru">Русский</option>
+            <option value="vi" lang="vi">Tiếng Việt</option>
+          </select>
+        </label>
+      </div>
+    </div>
+    <div class="mainbar">
+      <div class="container">
+        <a class="brand" href="./" aria-label="PCB.PUB 信鸽子寻址 首页" data-i18n-attr="aria-label:brand.home">
+          <img class="brand-logo" src="assets/logo.svg" alt="PCB.PUB" width="228" height="42">
+          <span class="brand-sub" data-i18n="brand.sub">信鸽子寻址</span>
+        </a>
+        <nav class="site-nav" aria-label="主导航" data-i18n-attr="aria-label:nav.label">
+          <a href="rules.html" data-i18n="nav.rules">使用规则</a>
+          <a class="nav-cta" href="apply.html" data-i18n="nav.apply">申请入住</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="container">
+        <div class="hero-copy">
+          <p class="eyebrow" data-i18n="hero.eyebrow">子域名服务 · 人工审核</p>
+          <h1 data-i18n-html="hero.h1">给每个网络站点，<br>一个寄得到的地址</h1>
+          <p class="lead" data-i18n-html="hero.lead">信鸽子寻址免费提供 <span class="mono nowrap">你的名字.pcb.pub</span> 子域名，通过 CNAME 或 IPv4 指向你自己托管的网站。每份申请都由人工审核。</p>
+          <form class="checker" action="apply.html#name" method="get" novalidate data-checker>
+            <label class="checker-label" for="check-name" data-i18n="chk.label">先查一查，想要的名字还在不在</label>
+            <div class="checker-row">
+              <div class="checker-field">
+                <input id="check-name" name="name" type="text" inputmode="url" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="63" placeholder="yourname" aria-describedby="check-hint">
+                <span class="checker-suffix" aria-hidden="true">.pcb.pub</span>
+              </div>
+              <button class="btn btn-primary" type="submit" data-i18n="chk.submit">查询</button>
+            </div>
+            <p class="checker-hint" id="check-hint" data-i18n="chk.hint">3 位及以上（最多 32 位），可用小写字母、数字或连字符</p>
+            <div class="checker-result" role="status" aria-live="polite" data-check-result></div>
+          </form>
+          <p class="hero-meta"><span data-i18n="hero.meta">非营利项目 · 子域名 3 位及以上 · 一次申请 5 年有效</span><a href="rules.html" data-i18n="hero.rules">查看使用规则</a></p>
+        </div>
+
+        <div class="envelope" aria-hidden="true">
+          <div class="envelope-body">
+            <p class="envelope-from" data-i18n="env.from">寄自 · 信鸽子寻址</p>
+            <div class="stamp">
+              <div class="stamp-paper">
+                <div class="stamp-inner">
+                  <svg class="stamp-art" viewBox="0 0 84 60" aria-hidden="true" focusable="false"><g transform="translate(50 33) scale(0.955)"><circle r="22" fill="#d6e2f4"/><path d="M-13-15c4-3 10-3 12 1 1 3-2 4-1 7s-3 5-6 4-4 2-7 0-3-5-1-7 0-3 3-5zM4-4c3-2 8-1 10 2s1 7-1 10-5 6-8 5-2-5-3-8-1-7 2-9zM10-17c3-1 7 1 8 4-2 1-5 1-7-1z" fill="#0c3a85" fill-opacity=".2"/><g fill="none" stroke="#0c3a85" stroke-width="1" stroke-opacity=".45"><ellipse rx="8.5" ry="22"/><ellipse rx="16" ry="22"/><path d="M0-22V22M-22 0H22M-19-11Q0-7.5 19-11M-19 11Q0 14.5 19 11"/></g><circle r="22" fill="none" stroke="#0c3a85" stroke-width="1.6"/></g><path d="M5 47C20 60 68 58 80 26" fill="none" stroke="#c2463a" stroke-width="1.3" stroke-dasharray="2.2 2.6" stroke-linecap="round"/><g transform="translate(1 4) scale(.76)"><g fill="#fff" stroke="#fff" stroke-width="5" stroke-linejoin="round"><path d="M43 21C44 13 42 7 37 2C36 9 35 15 33 21Z"/><path d="M17 22L5 19L6 30L17 28Z"/><ellipse cx="30" cy="25" rx="15" ry="7.5"/><circle cx="46" cy="19" r="6"/><path d="M51.5 17.2L58 19.2L51.5 21.4Z"/><path d="M36 22C35 12 29 5 19 1C21 9 23 16 25 22Z"/><g transform="translate(24 29) rotate(-8)"><rect width="13" height="9" rx="1"/></g></g><path d="M43 21C44 13 42 7 37 2C36 9 35 15 33 21Z" fill="#9db7e6"/><g fill="#0c3a85"><path d="M17 22L5 19L6 30L17 28Z"/><ellipse cx="30" cy="25" rx="15" ry="7.5"/><circle cx="46" cy="19" r="6"/></g><path d="M51.5 17.2L58 19.2L51.5 21.4Z" fill="#f2a516"/><circle cx="47.8" cy="17.6" r="1.3" fill="#fff"/><g transform="translate(24 29) rotate(-8)"><rect width="13" height="9" rx="1" fill="#fff" stroke="#c2463a" stroke-width="1.5"/><path d="M1.2 1.3l5.3 3.8 5.3-3.8" fill="none" stroke="#c2463a" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></g><path d="M36 22C35 12 29 5 19 1C21 9 23 16 25 22Z" fill="#3d6cc4"/></g></svg>
+                  <p class="stamp-text"><span data-i18n="env.stamp1">一次申请</span><b data-i18n="env.stamp2">5年有效</b></p>
+                </div>
+              </div>
+            </div>
+            <svg class="postmark" viewBox="0 0 150 80">
+              <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M4 26q8-6 16 0t16 0t16 0t14 0"/>
+                <path d="M4 40q8-6 16 0t16 0t16 0t14 0"/>
+                <path d="M4 54q8-6 16 0t16 0t16 0t14 0"/>
+                <circle cx="112" cy="40" r="34"/>
+                <circle cx="112" cy="40" r="28" stroke-width="1.2"/>
+              </g>
+              <text x="112" y="38" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor" font-family="ui-monospace, Menlo, Consolas, monospace">PCB.PUB</text>
+              <text x="112" y="53" text-anchor="middle" font-size="10" fill="currentColor" data-i18n="env.postmark">已寄达</text>
+            </svg>
+            <div class="envelope-to">
+              <p class="envelope-label" data-i18n="env.to">寄往</p>
+              <p class="address"><span class="slot" data-slot>yourname</span>.pcb.pub</p>
+              <div class="address-line"></div>
+              <div class="tag-row">
+                <span class="tag" data-i18n="tag.review">人工审核</span>
+                <span class="tag">CNAME / IPv4</span>
+                <span class="tag" data-i18n="tag.len">子域名 3 位及以上</span>
+                <span class="tag" data-i18n="tag.hosted">网站由你托管</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="feat-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 id="feat-title" data-i18n="feat.title">我们提供地址，你掌管网站</h2>
+            <p data-i18n="feat.sub">pcb.pub 只负责把访客指引到你的网站，网站本身始终在你手里。</p>
+          </div>
+        </div>
+        <div class="feature-grid">
+          <article class="feature">
+            <div class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg></div>
+            <h3 data-i18n="feat.1t">专属子域名</h3>
+            <p data-i18n="feat.1d">一个好记的 yourname.pcb.pub 地址，名字 3 位及以上。一次申请有效 5 年，到期可以续期。</p>
+          </article>
+          <article class="feature">
+            <div class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2.5 20.5c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="m16 11 2 2 4-4"/></svg></div>
+            <h3 data-i18n="feat.2t">人工审核</h3>
+            <p data-i18n="feat.2d">每份申请都由站长亲自查看，确保子域名用在有内容的网络站点上。</p>
+          </article>
+          <article class="feature">
+            <div class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01M11 7.5h6M11 16.5h6"/></svg></div>
+            <h3 data-i18n="feat.3t">网站由你托管</h3>
+            <p data-i18n="feat.3d">网站文件放在你自己的平台或服务器上，比如 GitHub Pages、Cloudflare Pages，或你的云服务器。pcb.pub 只提供地址，不存放你的网站。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-paper" id="records" aria-labelledby="rec-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 id="rec-title" data-i18n="rec.title">两种解析方式</h2>
+            <p data-i18n="rec.sub">按你的托管方式二选一，每个子域名只能使用其中一种。</p>
+          </div>
+        </div>
+        <div class="record-grid">
+          <article class="record-card">
+            <div class="record-head">
+              <h3>CNAME</h3>
+              <span class="badge" data-i18n="rec.cname.badge">适合托管平台</span>
+            </div>
+            <p data-i18n="rec.cname.desc">网站在 GitHub Pages、Cloudflare Pages、Vercel 等平台上时使用，指向平台提供给你的域名。</p>
+            <dl class="record">
+              <div><dt data-i18n="rec.k.name">子域名</dt><dd>yourname.pcb.pub</dd></div>
+              <div><dt data-i18n="rec.k.type">类型</dt><dd>CNAME</dd></div>
+              <div><dt data-i18n="rec.k.target">指向</dt><dd>yourname.github.io</dd></div>
+            </dl>
+          </article>
+          <article class="record-card">
+            <div class="record-head">
+              <h3 data-i18n="rec.a.title">A 记录（IPv4）</h3>
+              <span class="badge" data-i18n="rec.a.badge">适合自有服务器</span>
+            </div>
+            <p data-i18n="rec.a.desc">网站在你自己的云服务器上时使用，指向服务器的公网 IPv4 地址，服务器须位于中国内地以外。</p>
+            <dl class="record">
+              <div><dt data-i18n="rec.k.name">子域名</dt><dd>yourname.pcb.pub</dd></div>
+              <div><dt data-i18n="rec.k.type">类型</dt><dd>A</dd></div>
+              <div><dt data-i18n="rec.k.target">指向</dt><dd>203.0.113.10</dd></div>
+            </dl>
+          </article>
+        </div>
+        <div class="note">
+          <p data-i18n="rec.note">暂不开放 MX、NS 等其他记录类型。更换服务器或停用 IP 时，请及时来信修改或删除解析。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="status" aria-labelledby="status-title" data-js>
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 id="status-title" data-i18n="status.title">站点状态</h2>
+            <p data-i18n="status.sub">从建站那天起，信鸽每天都在路上。</p>
+          </div>
+        </div>
+        <div class="status-grid">
+          <article class="status-card status-card--runtime">
+            <p class="status-label" data-i18n="status.runtime">已稳定运行</p>
+            <p class="runtime">
+              <span class="rt"><b data-rt="d">0</b><small data-i18n="rt.d">天</small></span>
+              <span class="rt"><b data-rt="h">00</b><small data-i18n="rt.h">时</small></span>
+              <span class="rt"><b data-rt="m">00</b><small data-i18n="rt.m">分</small></span>
+              <span class="rt"><b data-rt="s">00</b><small data-i18n="rt.s">秒</small></span>
+            </p>
+            <p class="status-foot"><span data-i18n="status.since">建站于</span> <span data-launch-solar>2026年10月5日</span><span data-launch-lunar></span></p>
+          </article>
+          <article class="status-card">
+            <p class="status-label" data-i18n="status.today">今天</p>
+            <p class="status-value" data-today-solar>—</p>
+            <p class="status-foot"><span data-today-week></span><br><span data-today-lunar></span></p>
+          </article>
+          <article class="status-card" data-stats>
+            <p class="status-label" data-i18n="status.visits">访问统计</p>
+            <dl class="stat-pair">
+              <div><dt data-i18n="stat.pv">浏览</dt><dd data-stat="pv">—</dd></div>
+              <div><dt data-i18n="stat.uv">访客</dt><dd data-stat="uv">—</dd></div>
+            </dl>
+          </article>
+          <article class="status-card" data-online hidden>
+            <p class="status-label"><i class="live-dot" aria-hidden="true"></i><span data-i18n="status.online">当前在线</span></p>
+            <p class="status-value"><span data-stat="online">—</span> <small data-i18n="status.people">人</small></p>
+            <p class="status-foot" data-i18n="status.live">实时更新</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-paper" aria-labelledby="how-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2 id="how-title" data-i18n="steps.title">怎么入住</h2>
+            <p data-i18n="steps.sub">四步，就能拥有自己的 pcb.pub 地址。</p>
+          </div>
+        </div>
+        <ol class="steps">
+          <li class="step">
+            <div class="step-num" aria-hidden="true">1</div>
+            <h3 data-i18n="steps.1t">查一查名字</h3>
+            <p data-i18n="steps.1d">在页面顶部查询想要的子域名：3 位及以上，可用小写字母、数字或连字符。</p>
+          </li>
+          <li class="step">
+            <div class="step-num" aria-hidden="true">2</div>
+            <h3 data-i18n="steps.2t">准备好网站</h3>
+            <p data-i18n="steps.2d">部署在 GitHub Pages、Cloudflare Pages 等平台，或你自己的服务器上，须位于中国内地以外。</p>
+          </li>
+          <li class="step">
+            <div class="step-num" aria-hidden="true">3</div>
+            <h3 data-i18n="steps.3t">发邮件申请</h3>
+            <p data-i18n-html="steps.3d">按模板写明子域名、解析方式和目标地址，发送到 <span class="mono">tyzokaw@163.com</span>。</p>
+          </li>
+          <li class="step">
+            <div class="step-num" aria-hidden="true">4</div>
+            <h3 data-i18n="steps.4t">审核后开通</h3>
+            <p data-i18n="steps.4d">人工审核通过后，我们为你添加解析并回信通知，有效期 5 年。</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container">
+        <div>
+          <h2 data-i18n="cta.title">你的网络站点，也值得一个好地址</h2>
+          <p data-i18n="cta.sub">人工审核，一封邮件就能申请。</p>
+        </div>
+        <a class="btn btn-light" href="apply.html" data-i18n="nav.apply">申请入住</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="assets/logo.svg" alt="PCB.PUB" width="174" height="32">
+          <p data-i18n="footer.desc">非营利的子域名服务。网站由各自站长托管，内容由站长负责。</p>
+          <p class="footer-by"><span data-i18n="top.by">提供方：</span><a href="https://27.gs.cn/" target="_blank" rel="noopener">27.GS.CN<svg class="ext" viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 10.5 10.5 5.5M6.5 5.5h4v4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
+        </div>
+        <nav class="footer-links" aria-label="页脚导航" data-i18n-attr="aria-label:footer.label">
+          <a href="apply.html" data-i18n="nav.apply">申请入住</a>
+          <a href="rules.html" data-i18n="nav.rules">使用规则</a>
+          <a href="mailto:tyzokaw@163.com?subject=%E4%B8%BE%E6%8A%A5%20xxx.pcb.pub" data-mail="report" data-i18n="footer.report">举报违规</a>
+          <a href="https://github.com/27gscn/pcb.pub">GitHub</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-status" data-js>
+          <span><span data-i18n="stat.running">已运行</span> <b data-days>0</b> <span data-i18n="stat.days">天</span></span>
+          <span data-stats><span data-i18n="stat.pv">浏览</span> <b data-stat="pv">—</b></span>
+          <span data-stats><span data-i18n="stat.uv">访客</span> <b data-stat="uv">—</b></span>
+          <span data-online hidden><i class="live-dot" aria-hidden="true"></i><span data-i18n="stat.online">在线</span> <b data-stat="online">—</b></span>
+        </p>
+        <nav class="lang-list" aria-label="语言" data-i18n-attr="aria-label:lang.label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.6 3.6 5.6 3.6 9s-1.2 6.4-3.6 9c-2.4-2.6-3.6-5.6-3.6-9S9.6 5.6 12 3z"/></svg>
+          <a href="?lang=zh-CN" data-lang="zh-CN" lang="zh-CN" hreflang="zh-CN">简体中文</a>
+          <a href="?lang=zh-TW" data-lang="zh-TW" lang="zh-TW" hreflang="zh-TW">繁體中文</a>
+          <a href="?lang=en" data-lang="en" lang="en" hreflang="en">English</a>
+          <a href="?lang=ja" data-lang="ja" lang="ja" hreflang="ja">日本語</a>
+          <a href="?lang=ko" data-lang="ko" lang="ko" hreflang="ko">한국어</a>
+          <a href="?lang=fr" data-lang="fr" lang="fr" hreflang="fr">Français</a>
+          <a href="?lang=de" data-lang="de" lang="de" hreflang="de">Deutsch</a>
+          <a href="?lang=es" data-lang="es" lang="es" hreflang="es">Español</a>
+          <a href="?lang=pt" data-lang="pt" lang="pt" hreflang="pt">Português</a>
+          <a href="?lang=it" data-lang="it" lang="it" hreflang="it">Italiano</a>
+          <a href="?lang=ru" data-lang="ru" lang="ru" hreflang="ru">Русский</a>
+          <a href="?lang=vi" data-lang="vi" lang="vi" hreflang="vi">Tiếng Việt</a>
+        </nav>
+      </div>
+      <span id="busuanzi_value_site_pv" hidden></span><span id="busuanzi_value_site_uv" hidden></span>
+    </div>
+  </footer>
+</body>
+</html>
