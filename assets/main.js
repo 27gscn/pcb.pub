@@ -1,6 +1,6 @@
 /*
  * PCB.PUB 页面脚本
- * 子域名查询 · 邮件模板 · 建站日期与运行天数 · 访问统计 · 在线人数 · 信鸽
+ * 子域名查询 · 邮件模板 · 建站日期（公历、农历）与运行天数 · 访问统计 · 在线人数 · 夜间模式 · 回到顶部 · 信鸽
  * 日常配置请改 assets/config.js，这里一般不用动。
  */
 (function () {
@@ -15,7 +15,14 @@
   var DEFAULT_LAUNCH = "2026-10-05T00:00:00+08:00";
   var LAUNCH = Date.parse(CFG.launch || DEFAULT_LAUNCH);
   if (isNaN(LAUNCH)) LAUNCH = Date.parse(DEFAULT_LAUNCH);
-  var RESERVED = names(CFG.reserved, ["www", "mail", "email", "smtp", "imap", "pop", "ftp", "admin", "root", "api", "app", "dev", "test", "status", "docs", "help", "support", "apply", "about", "static", "cdn", "ns1", "ns2"]);
+  var RESERVED = names(CFG.reserved, [
+    "www", "mail", "email", "webmail", "smtp", "imap", "pop", "pop3", "ftp", "dns", "ns1", "ns2", "admin",
+    "root", "api", "app", "dev", "test", "beta", "staging", "status", "docs", "help", "support", "apply",
+    "about", "static", "assets", "img", "cdn", "login", "account", "auth", "sso", "secure", "pay", "vpn",
+    "proxy", "localhost", "autodiscover", "autoconfig", "mta-sts", "wpad", "isatap", "postmaster",
+    "hostmaster", "webmaster", "abuse", "security", "noreply", "no-reply", "pcb", "pub", "pcbpub", "xinge",
+    "xingezi", "official"
+  ]);
   var PENDING = names(CFG.pending, []);
   var state = { name: "", check: null };
 
@@ -134,12 +141,23 @@
 
   /* ---------- 子域名查询 ---------- */
 
-  // 依次尝试：阿里 DNS（国内外都能用）→ Cloudflare → Google
-  var RESOLVERS = [
-    "https://dns.alidns.com/resolve?type=1&name=",
-    "https://cloudflare-dns.com/dns-query?type=A&name=",
-    "https://dns.google/resolve?type=A&name="
-  ];
+  // 依次尝试：阿里 DNS（国内外都能用）→ Cloudflare → Google。先查 A（IPv4），必要时再查 AAAA（IPv6）
+  var RESOLVERS = {
+    A: [
+      "https://dns.alidns.com/resolve?type=1&name=",
+      "https://cloudflare-dns.com/dns-query?type=A&name=",
+      "https://dns.google/resolve?type=A&name="
+    ],
+    AAAA: [
+      "https://dns.alidns.com/resolve?type=28&name=",
+      "https://cloudflare-dns.com/dns-query?type=AAAA&name=",
+      "https://dns.google/resolve?type=AAAA&name="
+    ]
+  };
+
+  // 保留名称的兜底：保留名称加数字的变体（mail2、ns3、www-1），以及含有本站名称、容易被误认为官方的名称
+  var RESERVED_BASES = ["ns", "mx"];
+  var BRAND_WORDS = ["pcb", "xinge", "official", "guanfang"];
 
   var ICONS = {
     ok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m7.5 12.5 3 3 6-6.5"/></svg>',
@@ -151,6 +169,7 @@
   var KINDS = {
     invalid: { icon: "warn" },
     reserved: { icon: "no", key: "chk.reserved" },
+    similar: { icon: "no", key: "chk.similar" },
     pending: { icon: "no", key: "chk.pending" },
     taken: { icon: "no", key: "chk.taken" },
     checking: { icon: "wait", key: "chk.checking" },
@@ -172,6 +191,12 @@
     if (name.length > 32) return "chk.long";
     if (/^-|-$|--/.test(name)) return "chk.hyphen";
     return null;
+  }
+
+  function similar(name) {
+    var base = name.replace(/-?\d+$/, "");
+    if (base && base !== name && (RESERVED.indexOf(base) !== -1 || RESERVED_BASES.indexOf(base) !== -1)) return true;
+    return BRAND_WORDS.some(function (word) { return name.indexOf(word) !== -1; });
   }
 
   function fetchJSON(url, ms) {
@@ -207,17 +232,29 @@
     return null;
   }
 
-  function lookup(domain) {
-    if (!window.fetch || typeof Promise !== "function") return { then: function (fn) { fn("error"); } };
+  // 依次问各个 DNS 服务，返回第一份能判断的结果；都不行返回 null
+  function ask(urls, domain) {
     var i = 0;
     return new Promise(function (resolve) {
       (function next() {
-        if (i >= RESOLVERS.length) return resolve("error");
-        fetchJSON(RESOLVERS[i++] + encodeURIComponent(domain), 4500).then(function (data) {
-          var result = judge(data);
-          if (result) resolve(result); else next();
+        if (i >= urls.length) return resolve(null);
+        fetchJSON(urls[i++] + encodeURIComponent(domain), 4500).then(function (data) {
+          if (judge(data)) resolve(data); else next();
         }, next);
       })();
+    });
+  }
+
+  function lookup(domain) {
+    if (!window.fetch || typeof Promise !== "function") return { then: function (fn) { fn("error"); } };
+    return ask(RESOLVERS.A, domain).then(function (data) {
+      if (!data) return "error";
+      var result = judge(data);
+      // 名称存在（NOERROR）但没有 A 记录时，可能只有 AAAA 记录，再查一次 IPv6
+      if (result !== "free" || data.Status !== 0) return result;
+      return ask(RESOLVERS.AAAA, domain).then(function (six) {
+        return six ? judge(six) : "error";
+      });
     });
   }
 
@@ -297,6 +334,7 @@
       var key = problem(name);
       if (key) return show({ kind: "invalid", key: key, name: name });
       if (RESERVED.indexOf(name) !== -1) return show({ kind: "reserved", name: name });
+      if (similar(name)) return show({ kind: "similar", name: name });
       if (PENDING.indexOf(name) !== -1) return show({ kind: "pending", name: name });
       show({ kind: "checking", name: name });
       lookup(name + "." + ZONE).then(function (result) {
@@ -345,7 +383,73 @@
     });
   }
 
-  /* ---------- 建站日期与运行天数 ---------- */
+  /* ---------- 建站日期（公历、农历）与运行天数 ---------- */
+
+  var STEMS = "甲乙丙丁戊己庚辛壬癸";
+  var BRANCHES = "子丑寅卯辰巳午未申酉戌亥";
+  var MONTHS = "正二三四五六七八九十冬腊";
+  var DIGITS = "一二三四五六七八九十";
+  var lunarFormats = {};
+
+  function lunarDay(n) {
+    if (n === 10) return "初十";
+    if (n === 20) return "二十";
+    if (n === 30) return "三十";
+    return "初十廿三".charAt(Math.floor(n / 10)) + DIGITS.charAt((n - 1) % 10);
+  }
+
+  // 用浏览器自带的农历（Intl 的 chinese 历法）换算，不支持的浏览器返回 null，页面就只显示公历
+  function lunar(date, timeZone) {
+    try {
+      var key = timeZone || "local";
+      var format = lunarFormats[key] || (lunarFormats[key] = new Intl.DateTimeFormat("en-u-ca-chinese", {
+        timeZone: timeZone, year: "numeric", month: "numeric", day: "numeric"
+      }));
+      var parts = {};
+      format.formatToParts(date).forEach(function (p) { parts[p.type] = p.value; });
+      var year = parseInt(parts.relatedYear || parts.year, 10);
+      var month = parseInt(parts.month, 10);
+      var day = parseInt(parts.day, 10);
+      if (!(year > 1000 && month >= 1 && month <= 12 && day >= 1 && day <= 30)) return null;
+      return { year: year, month: month, day: day, leap: /\D/.test(parts.month) };
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // 简体：农历丙午年八月廿五；繁体：農曆丙午年八月廿五；日文：旧暦 丙午年8月25日；其他语言按语言文件里的 lunar.* 格式
+  function lunarText(date, timeZone) {
+    var l = lunar(date, timeZone);
+    if (!l) return "";
+    var cycle = (l.year - 4) % 60;
+    var ganzhi = STEMS.charAt(cycle % 10) + BRANCHES.charAt(cycle % 12);
+    var lang = I18N.lang;
+    var fmt = t("lunar.fmt", null);
+    if (fmt) {
+      var list = function (key) {
+        var value = t(key, "");
+        return value ? String(value).split(",") : [];
+      };
+      var stems = list("lunar.stems");
+      var branches = list("lunar.branches");
+      var gz = stems.length === 10 && branches.length === 12
+        ? stems[cycle % 10] + (t("lunar.gzSep", "") || "") + branches[cycle % 12]
+        : ganzhi;
+      var month = String(t(l.leap ? "lunar.leap" : "lunar.month", "{m}")).replace("{m}", l.month);
+      return String(fmt)
+        .replace("{month}", month)
+        .replace("{m}", l.month)
+        .replace("{d}", l.day)
+        .replace("{animal}", list("lunar.animals")[cycle % 12] || "")
+        .replace("{gz}", gz);
+    }
+    if (lang === "ja") {
+      return "旧暦 " + ganzhi + "年" + (l.leap ? "閏" : "") + l.month + "月" + l.day + "日";
+    }
+    var tw = lang === "zh-TW";
+    var month = tw && l.month === 12 ? "臘" : MONTHS.charAt(l.month - 1);
+    return (tw ? "農曆" : "农历") + ganzhi + "年" + (l.leap ? (tw ? "閏" : "闰") : "") + month + "月" + lunarDay(l.day);
+  }
 
   function solar(date, timeZone, options) {
     try {
@@ -357,15 +461,106 @@
     }
   }
 
-  // 页脚：建站日期（按北京时间显示）和已运行天数
+  // 页脚：建站日期（按北京时间显示，后面括号里是农历）和已运行天数
   function renderDates() {
-    setText("[data-launch-solar]", solar(new Date(LAUNCH), "Asia/Shanghai", { year: "numeric", month: "long", day: "numeric" }));
+    var launch = new Date(LAUNCH);
+    setText("[data-launch-solar]", solar(launch, "Asia/Shanghai", { year: "numeric", month: "long", day: "numeric" }));
+    var text = lunarText(launch, "Asia/Shanghai");
+    var wide = /^(zh|ja)/.test(I18N.lang);
+    setText("[data-launch-lunar]", text ? (wide ? "（" + text + "）" : " (" + text + ")") : "");
     tick();
   }
 
   function tick() {
     var days = Math.max(0, Math.floor((Date.now() - LAUNCH) / 86400000));
     setText("[data-days]", num(days));
+    // 正好 1 天时用单数（如英文“1 day”、德文“1 Tag”），其余用页面上的“天”
+    all('[data-i18n="stat.days"]').forEach(function (el) {
+      var text = days === 1 && t("stat.day") ? t("stat.day") : t("stat.days") || el._i18n;
+      if (text && el.textContent !== text) el.textContent = text;
+    });
+  }
+
+  /* ---------- 夜间模式 ---------- */
+
+  var THEME_KEY = "pcb-theme";
+
+  function savedTheme() {
+    var value = null;
+    try { value = localStorage.getItem(THEME_KEY); } catch (e) { value = null; }
+    return value === "dark" || value === "light" ? value : null;
+  }
+
+  function systemTheme() {
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    all('meta[name="theme-color"]').forEach(function (meta) {
+      meta.setAttribute("content", theme === "dark" ? "#0b1830" : "#0a2b61");
+    });
+    all("[data-theme-toggle]").forEach(function (button) {
+      button.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+    });
+  }
+
+  // 默认跟随系统；访客点过按钮后记住选择（localStorage 的 pcb-theme）
+  function initTheme() {
+    applyTheme(savedTheme() || systemTheme());
+    all("[data-theme-toggle]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        try { localStorage.setItem(THEME_KEY, next); } catch (e) { /* 存储不可用时只切换本页 */ }
+        applyTheme(next);
+      });
+    });
+    if (window.matchMedia) {
+      var query = window.matchMedia("(prefers-color-scheme: dark)");
+      var follow = function () { if (!savedTheme()) applyTheme(systemTheme()); };
+      if (query.addEventListener) query.addEventListener("change", follow);
+      else if (query.addListener) query.addListener(follow);
+    }
+    window.addEventListener("storage", function (event) {
+      if (event.key === THEME_KEY) applyTheme(savedTheme() || systemTheme());
+    });
+  }
+
+  /* ---------- 回到顶部 ---------- */
+
+  function initToTop() {
+    var buttons = all("[data-to-top]");
+    if (!buttons.length) return;
+    var shown = null;
+    function update() {
+      var show = (window.pageYOffset || document.documentElement.scrollTop || 0) > 480;
+      if (show === shown) return;
+      shown = show;
+      buttons.forEach(function (button) { button.classList.toggle("is-visible", show); });
+    }
+    var ticking = false;
+    window.addEventListener("scroll", function () {
+      if (ticking) return;
+      ticking = true;
+      (window.requestAnimationFrame || setTimeout)(function () {
+        ticking = false;
+        update();
+      });
+    }, { passive: true });
+    update();
+    buttons.forEach(function (button) {
+      button.addEventListener("click", function (event) {
+        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        try { window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" }); } catch (e) { window.scrollTo(0, 0); }
+        // 用键盘按下时，把焦点交给页头的标志，免得焦点停在隐藏起来的按钮上
+        if (event.detail === 0) {
+          var brand = document.querySelector(".brand");
+          if (brand) {
+            try { brand.focus({ preventScroll: true }); } catch (e) { brand.focus(); }
+          }
+        }
+      });
+    });
   }
 
   /* ---------- 访问统计（Vercount，沿用不蒜子的元素 id） ---------- */
@@ -559,11 +754,13 @@
     fitText();
   }
 
+  initTheme();
   renderReserved();
   initCopy();
   initChecker();
   initStats();
   initOnline();
+  initToTop();
   renderAll();
   setInterval(tick, 60000);
   on("pcb:lang", renderAll);
@@ -574,5 +771,5 @@
   });
   pigeons();
 
-  window.PCB_TEST = { clean: clean, problem: problem, judge: judge };
+  window.PCB_TEST = { clean: clean, problem: problem, judge: judge, similar: similar, lunarText: lunarText, lunarDay: lunarDay };
 })();

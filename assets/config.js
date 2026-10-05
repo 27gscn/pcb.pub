@@ -5,13 +5,19 @@ window.PCB_CONFIG = {
   // 申请与举报邮箱（网页正文里也写着这个邮箱，换邮箱时请在所有文件里搜索替换）
   email: "tyzpkaw@163.com",
 
-  // 建站时间（北京时间）。页脚的“建站于”日期和“已运行 N 天”都按它计算
+  // 建站时间（北京时间）。页脚的“建站于”公历、农历日期和“已运行 N 天”都按它计算
   launch: "2026-10-05T00:00:00+08:00",
 
-  // 保留名称：查询时提示“不开放申请”，申请页也会列出来
+  // 保留名称：查询时提示“不开放申请”，申请页也会列出来。
+  // 另有兜底规则（写在 main.js 里）：保留名称加数字的变体（如 mail2、ns3、www-1），
+  // 以及含有 pcb、xinge、official、guanfang 的名称，查询时提示“与保留名称或本站名称相近”
   reserved: [
-    "www", "mail", "email", "smtp", "imap", "pop", "ftp", "admin", "root", "api", "app", "dev",
-    "test", "status", "docs", "help", "support", "apply", "about", "static", "cdn", "ns1", "ns2"
+    "www", "mail", "email", "webmail", "smtp", "imap", "pop", "pop3", "ftp", "dns", "ns1", "ns2",
+    "admin", "root", "api", "app", "dev", "test", "beta", "staging", "status", "docs", "help",
+    "support", "apply", "about", "static", "assets", "img", "cdn", "login", "account", "auth",
+    "sso", "secure", "pay", "vpn", "proxy", "localhost", "autodiscover", "autoconfig", "mta-sts",
+    "wpad", "isatap", "postmaster", "hostmaster", "webmaster", "abuse", "security", "noreply",
+    "no-reply", "pcb", "pub", "pcbpub", "xinge", "xingezi", "official"
   ],
 
   // 审核中的名称：收到申请、还没开通时写进来，查询会提示“正在审核中”。

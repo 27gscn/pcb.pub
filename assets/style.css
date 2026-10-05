@@ -3,6 +3,11 @@
 :root {
   --ink: #0c3a85;
   --ink-hover: #082c66;
+  /* 按钮、页头“申请入住”等深色底；夜间模式下与文字用的 --ink 分开 */
+  --ink-bg: #0c3a85;
+  --ink-bg-hover: #082c66;
+  --cta-bg: #0c3a85;
+  --envelope: #fffdf9;
   --ink-deep: #0a2b61;
   --ink-soft: #e8eef8;
   --stamp: #c2463a;
@@ -19,8 +24,32 @@
   /* 中文字体放在前面，引号、省略号等标点才会按全角显示 */
   --font: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Noto Sans CJK SC",
     "Source Han Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+  /* 等宽字体没有汉字，后面接上中文字体，“你的名字”才不会落到宋体 */
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Noto Sans SC", "Noto Sans CJK SC", monospace;
   color-scheme: light;
+}
+
+/* 夜间模式：页面按 html[data-theme] 切换，默认跟随系统，访客也可以在页头手动切换 */
+html[data-theme="dark"] {
+  --ink: #8fb3f4;
+  --ink-hover: #b8d0fa;
+  --ink-bg: #2e5eb8;
+  --ink-bg-hover: #3a6cc9;
+  --cta-bg: #142a52;
+  --ink-deep: #0b1830;
+  --ink-soft: #1d2a44;
+  --stamp: #e36b5d;
+  --text: #e6e4df;
+  --muted: #a4a097;
+  --canvas: #1b1e24;
+  --paper: #15171b;
+  --paper-2: #272b33;
+  --border: #2e333b;
+  --border-strong: #41464f;
+  --envelope: #21252c;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 18px rgba(0, 0, 0, 0.28);
+  color-scheme: dark;
 }
 
 *,
@@ -112,7 +141,7 @@ code {
   z-index: 10;
   padding: 10px 16px;
   border-radius: var(--radius);
-  background: var(--ink);
+  background: var(--ink-bg);
   color: #fff;
   text-decoration: none;
 }
@@ -158,11 +187,26 @@ code {
 }
 
 .provider {
+  display: flex;
+  align-items: center;
   min-width: 0;
   margin: 0;
-  overflow: hidden;
   white-space: nowrap;
+}
+
+/* 空间不够时先省略“提供方：”这几个字，链接始终完整显示 */
+.provider > span {
+  min-width: 0;
+  overflow: hidden;
   text-overflow: ellipsis;
+}
+
+html:not(:lang(zh)):not(:lang(ja)) .provider > span {
+  margin-right: 0.3em;
+}
+
+.provider > a {
+  flex: none;
 }
 
 .provider a,
@@ -267,14 +311,14 @@ html:not(:lang(zh)) .brand-sub {
 
 .site-nav .nav-cta {
   padding: 0 20px;
-  background: var(--ink);
+  background: var(--ink-bg);
   color: #fff;
   font-weight: 600;
 }
 
 .site-nav .nav-cta:hover,
 .site-nav .nav-cta[aria-current="page"] {
-  background: var(--ink-hover);
+  background: var(--ink-bg-hover);
   color: #fff;
 }
 
@@ -319,8 +363,66 @@ html:not(:lang(zh)) .brand-sub {
 }
 
 .lang-switch option {
-  background: #fff;
+  background: var(--canvas);
   color: var(--text);
+}
+
+/* 页头右侧：夜间模式按钮 + 语言选择 */
+.topbar-tools {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 6px;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  border-color: rgba(255, 255, 255, 0.55);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.theme-toggle svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* 白天显示月亮（点了进入夜间），夜间显示太阳 */
+.theme-toggle .icon-sun,
+html[data-theme="dark"] .theme-toggle .icon-moon {
+  display: none;
+}
+
+html[data-theme="dark"] .theme-toggle .icon-sun {
+  display: block;
+}
+
+/* 标志：夜间模式换成浅色文字的版本 */
+.logo-dark,
+html[data-theme="dark"] .logo-light {
+  display: none;
+}
+
+html[data-theme="dark"] .logo-dark {
+  display: block;
 }
 
 /* ---------- Buttons ---------- */
@@ -350,12 +452,12 @@ html:not(:lang(zh)) .brand-sub {
 }
 
 .btn-primary {
-  background: var(--ink);
+  background: var(--ink-bg);
   color: #fff;
 }
 
 .btn-primary:hover {
-  background: var(--ink-hover);
+  background: var(--ink-bg-hover);
   color: #fff;
 }
 
@@ -458,7 +560,7 @@ html:lang(ja) .hero-meta span::after {
 .envelope {
   position: relative;
   overflow: hidden;
-  background: #fffdf9;
+  background: var(--envelope);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
@@ -471,9 +573,9 @@ html:lang(ja) .hero-meta span::after {
   background: repeating-linear-gradient(
     135deg,
     var(--stamp) 0 16px,
-    #fffdf9 16px 24px,
+    var(--envelope) 16px 24px,
     var(--ink) 24px 40px,
-    #fffdf9 40px 48px
+    var(--envelope) 40px 48px
   );
 }
 
@@ -809,12 +911,14 @@ html:lang(ja) .hero-meta span::after {
 
 .checker-result.is-taken,
 .checker-result.is-reserved,
+.checker-result.is-similar,
 .checker-result.is-pending {
   background: #fcefec;
 }
 
 .is-taken .checker-msg,
 .is-reserved .checker-msg,
+.is-similar .checker-msg,
 .is-pending .checker-msg {
   color: #ad3427;
 }
@@ -1049,7 +1153,7 @@ html:lang(ja) .hero-meta span::after {
 
 .cta {
   padding: 80px 0;
-  background: var(--ink);
+  background: var(--cta-bg);
   color: #fff;
 }
 
@@ -1180,6 +1284,26 @@ html:lang(ja) .footer-status > span::before {
 
 .footer-status b.footer-date {
   font-family: inherit;
+}
+
+/* 第一项（建站日期，带农历）较长：按普通文字排版，窄屏时整句自然换行，不把“建站于”挤成窄列。
+   它总在行首、间隔号本来就被裁掉，所以去掉间隔号、用左内边距补回被裁的 20px */
+.footer-status > span:first-child {
+  display: block;
+  padding-left: 20px;
+}
+
+html .footer-status > span:first-child::before {
+  content: none;
+}
+
+.footer-status [data-launch-solar] {
+  white-space: nowrap;
+}
+
+.footer-status .footer-lunar {
+  color: var(--muted);
+  font-weight: 400;
 }
 
 .footer-status .live-dot {
@@ -1353,7 +1477,7 @@ html:lang(ja) .footer-status > span::before {
   justify-content: center;
   width: 34px;
   height: 34px;
-  background: var(--ink);
+  background: var(--ink-bg);
   border-radius: 50%;
   color: #fff;
   font-family: var(--mono);
@@ -1432,6 +1556,16 @@ html:lang(ja) .footer-status > span::before {
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 12px;
+}
+
+.doc .naming-more {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.naming-more code {
+  white-space: nowrap;
 }
 
 .faq {
@@ -1697,11 +1831,15 @@ html:not(.js) [data-js] {
 html:lang(ja) {
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN",
     "Yu Gothic UI", Meiryo, "Noto Sans JP", "Noto Sans CJK JP", sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+    "Yu Gothic UI", Meiryo, "Noto Sans JP", "Noto Sans CJK JP", monospace;
 }
 
 html:lang(ko) {
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic",
     "Noto Sans KR", "Noto Sans CJK KR", sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", "Apple SD Gothic Neo", "Malgun Gothic",
+    "Noto Sans KR", "Noto Sans CJK KR", monospace;
 }
 
 html:lang(ko) body {
@@ -1739,6 +1877,163 @@ html:lang(ru) li {
 html:lang(zh-TW) {
   --font: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", "Noto Sans CJK TC", "Source Han Sans TC",
     -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", "PingFang TC", "Microsoft JhengHei",
+    "Noto Sans TC", "Noto Sans CJK TC", monospace;
+}
+
+/* 中文、日文的段落两端对齐，行尾更整齐。
+   窄栏里放不下的长英文（如 yourname.pcb.pub、Cloudflare）换行后会把字距拉得很开，
+   所以卡片、步骤不对齐；正文列表和常见问题只在宽屏上对齐 */
+html:lang(zh) :is(.hero .lead, .section-head p, .page-hero p),
+html:lang(ja) :is(.hero .lead, .section-head p, .page-hero p) {
+  text-align: justify;
+}
+
+@media (min-width: 641px) {
+  html:lang(zh) :is(.record-card > p, .doc p, .doc li, .faq p),
+  html:lang(ja) :is(.record-card > p, .doc p, .doc li, .faq p) {
+    text-align: justify;
+  }
+
+  html:lang(zh) .doc .option-card p,
+  html:lang(ja) .doc .option-card p {
+    text-align: start;
+  }
+}
+
+/* ---------- 夜间模式的细节 ---------- */
+
+html[data-theme="dark"] :focus-visible {
+  outline-color: rgba(143, 179, 244, 0.6);
+}
+
+html[data-theme="dark"] .btn-light {
+  background: #e9eef8;
+  color: #0c3a85;
+}
+
+html[data-theme="dark"] .btn-light:hover {
+  background: #fff;
+  color: #082c66;
+}
+
+html[data-theme="dark"] .envelope {
+  --border: #383d46;
+}
+
+html[data-theme="dark"] .envelope::before {
+  opacity: 0.85;
+}
+
+/* 邮票保持白天的配色，像一张真的邮票 */
+html[data-theme="dark"] .stamp {
+  --ink: #0c3a85;
+}
+
+html[data-theme="dark"] .address .slot {
+  text-decoration-color: rgba(143, 179, 244, 0.5);
+}
+
+html[data-theme="dark"] .checker-field:focus-within {
+  box-shadow: 0 0 0 3px rgba(143, 179, 244, 0.22);
+}
+
+html[data-theme="dark"] .checker-field input::placeholder {
+  color: #77736b;
+}
+
+html[data-theme="dark"] .checker-result.is-free {
+  background: rgba(18, 183, 106, 0.14);
+}
+
+html[data-theme="dark"] .is-free .checker-msg {
+  color: #6ee0a6;
+}
+
+html[data-theme="dark"] .checker-result.is-taken,
+html[data-theme="dark"] .checker-result.is-reserved,
+html[data-theme="dark"] .checker-result.is-similar,
+html[data-theme="dark"] .checker-result.is-pending {
+  background: rgba(229, 96, 80, 0.15);
+}
+
+html[data-theme="dark"] .is-taken .checker-msg,
+html[data-theme="dark"] .is-reserved .checker-msg,
+html[data-theme="dark"] .is-similar .checker-msg,
+html[data-theme="dark"] .is-pending .checker-msg {
+  color: #ff9d90;
+}
+
+html[data-theme="dark"] .checker-result.is-invalid,
+html[data-theme="dark"] .checker-result.is-error {
+  background: rgba(240, 170, 40, 0.14);
+}
+
+html[data-theme="dark"] .is-invalid .checker-msg,
+html[data-theme="dark"] .is-error .checker-msg {
+  color: #f3c26b;
+}
+
+/* 信鸽在深色背景上换浅一点的蓝 */
+html[data-theme="dark"] .pg-body {
+  fill: #4a78cf;
+}
+
+html[data-theme="dark"] .pg-wing {
+  fill: #7fa3ea;
+}
+
+html[data-theme="dark"] .pg-wing--far {
+  fill: #b9cdf3;
+}
+
+/* ---------- 回到顶部 ---------- */
+
+.to-top {
+  position: fixed;
+  right: max(20px, env(safe-area-inset-right, 0px));
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--canvas);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.2s, transform 0.2s, visibility 0.2s, background-color 0.15s, border-color 0.15s;
+}
+
+.to-top.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.to-top:hover {
+  border-color: var(--ink);
+  background: var(--ink-soft);
+}
+
+.to-top svg {
+  width: 20px;
+  height: 20px;
+}
+
+@media print {
+  .to-top,
+  .theme-toggle,
+  .pigeon-sky {
+    display: none !important;
+  }
 }
 
 /* ---------- Responsive ---------- */
@@ -1798,6 +2093,21 @@ html:lang(zh-TW) {
 
   .lang-switch select {
     height: 34px;
+  }
+
+  .theme-toggle {
+    width: 34px;
+    height: 34px;
+  }
+
+  .to-top {
+    right: max(16px, env(safe-area-inset-right, 0px));
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* 给右下角的“回到顶部”留出位置，滚到页底时不遮住页脚最后一行 */
+  .site-footer {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
   }
 
   .mainbar .container {
@@ -2074,6 +2384,14 @@ html:lang(zh-TW) {
     font-size: 12px;
   }
 
+  .topbar .container {
+    gap: 12px;
+  }
+
+  .topbar-tools {
+    gap: 6px;
+  }
+
   .site-nav .nav-cta {
     padding: 0 12px;
     font-size: 13px;
@@ -2103,6 +2421,28 @@ html:lang(zh-TW) {
 @media (max-width: 340px) {
   .container {
     --gutter: 16px;
+  }
+}
+
+/* 小屏手机上页头只留“27.GS.CN”链接，给夜间模式按钮和语言选择留出位置 */
+@media (max-width: 389px) {
+  .provider > span {
+    display: none;
+  }
+}
+
+/* 俄语的“提供方”最长，再宽一点也隐藏 */
+@media (max-width: 413px) {
+  html:lang(ru) .provider > span {
+    display: none;
+  }
+}
+
+/* 屏幕太窄时，“你的名字.pcb.pub”放不进首行，两端对齐会把首行的字拉散，改回左对齐 */
+@media (max-width: 349px) {
+  html:lang(zh) .hero .lead,
+  html:lang(ja) .hero .lead {
+    text-align: start;
   }
 }
 
