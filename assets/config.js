@@ -23,8 +23,8 @@ window.PCB_CONFIG = {
 
   // 实时在线人数（Supabase Realtime，免费）。按 README 创建项目后填入 Project URL 和 Publishable key（或 anon key）；
   // 这两个值本来就是公开给网页用的。千万不要填 secret / service_role key。留空则不显示在线人数
-  supabaseUrl: "",
-  supabaseKey: "",
+  supabaseUrl: "https://jovexnhdmggmznfprthc.supabase.co",
+  supabaseKey: "sb_publishable_axeH9ErVPmMrx2P178dOxw_aim2Am9y",
 
   // 进入页面时随机飞过的信鸽：true 开启，false 关闭
   pigeons: true
