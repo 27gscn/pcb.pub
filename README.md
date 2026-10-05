@@ -15,7 +15,8 @@
 | `assets/config.js` | **日常配置**：邮箱、保留名称、审核中名称、统计、在线人数、信鸽 |
 | `assets/lang.js` | 多语言核心：识别浏览器语言、切换语言、按需加载译文 |
 | `assets/i18n/*.js` | 11 种外语译文，每种语言一个文件（简体中文直接写在 HTML 里） |
-| `assets/main.js` | 页面功能：名称查询、邮件模板、运行时间、公历/农历日期、统计、信鸽 |
+| `assets/main.js` | 页面功能：名称查询、邮件模板、运行时间、公历/农历日期、统计、在线人数、信鸽 |
+| `assets/vendor/supabase.js` | 实时在线人数用的 supabase-js 库（官方文件，不用改） |
 | `assets/style.css` | 样式 |
 | `assets/logo.svg`、`assets/icon.svg`、`assets/icon-180.png`、`favicon.ico` | 标志与图标：航空信封造型，深蓝 `#0c3a85` + 航空邮件红 `#c2463a` |
 | `CNAME` | GitHub Pages 自定义域名（内容为 `pcb.pub`） |
@@ -141,7 +142,7 @@ DNS → Records → **Add record**：
 
 | 设置 | 说明 |
 | --- | --- |
-| `email` | 申请与举报邮箱。网页正文里也写着这个邮箱，换邮箱时请在所有文件里搜索 `tyzokaw@163.com` 并替换 |
+| `email` | 申请与举报邮箱。网页正文里也写着这个邮箱，换邮箱时请在所有文件里搜索 `tyzpkaw@163.com` 并替换 |
 | `launch` | 建站时间（北京时间），用于“已稳定运行”计时和公历/农历“建站于” |
 | `reserved` | 保留名称。查询时提示“不开放申请”，申请页会自动列出 |
 | `pending` | 审核中的名称。查询时提示“正在审核中”，页面上不列出。这是公开文件，只写名称，不写申请人信息 |
@@ -151,9 +152,10 @@ DNS → Records → **Add record**：
 
 ## 七、访问统计
 
-默认使用[不蒜子](https://busuanzi.ibruce.info/)，免注册。部署到 `pcb.pub` 后自动开始计数，首页和页脚显示浏览量与访客数。本地预览或统计服务暂时连不上时，统计块会自动隐藏。
+使用 [Vercount](https://vercount.one/)，免注册、免费，兼容不蒜子的页面元素。部署到 `pcb.pub` 后自动开始计数，首页“站点状态”和页脚显示全站浏览量与访客数。统计服务暂时连不上时，统计块会自动隐藏。
 
-想换成 [Vercount](https://vercount.one/)：把 `statsScript` 改成 `https://events.vercount.one/js`。它兼容不蒜子的页面元素，不用改 HTML（具体用法以其官网为准）。换服务后计数会从头开始。
+- 不蒜子（`busuanzi.ibruce.info`）目前经常连不上，所以没有用它。以后想换回去，把 `statsScript` 改成 `https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js` 即可，不用改 HTML。
+- 换统计服务后计数会从头开始。
 
 ## 八、实时在线人数（可选）
 
@@ -163,7 +165,7 @@ DNS → Records → **Add record**：
 2. 项目创建好后，复制两样东西：
    - **Project URL**：形如 `https://xxxx.supabase.co`（项目首页的 Connect，或 Project Settings → Data API）。
    - **Publishable key**：以 `sb_publishable_` 开头（Project Settings → API Keys）。旧项目也可以用 Legacy API Keys 里的 `anon` `public` key。
-3. 填进 `config.js` 的 `supabaseUrl` 和 `supabaseKey`，提交。刷新首页，“当前在线”就会出现。
+3. 填进 `config.js` 的 `supabaseUrl` 和 `supabaseKey`，提交。刷新首页，“当前在线”就会出现。连接用的 supabase-js 已放在 `assets/vendor/supabase.js`，不依赖外部 CDN。
 4. **绝对不要填 `service_role` 或 secret key**，它们有完整的数据库权限，而 `config.js` 是公开的。
 5. 一直不显示的话，到 Supabase 的 **Realtime → Settings**，确认允许公开频道（Allow public access）是开启的。
 6. 免费项目长时间没有活动可能会被暂停。暂停期间“当前在线”自动隐藏，到 Supabase 后台恢复项目即可。

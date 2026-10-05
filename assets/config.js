@@ -3,7 +3,7 @@
  */
 window.PCB_CONFIG = {
   // 申请与举报邮箱（网页正文里也写着这个邮箱，换邮箱时请在所有文件里搜索替换）
-  email: "tyzokaw@163.com",
+  email: "tyzpkaw@163.com",
 
   // 建站时间（北京时间）。首页“已稳定运行”计时和公历/农历“建站于”都按它计算
   launch: "2026-10-05T00:00:00+08:00",
@@ -18,10 +18,11 @@ window.PCB_CONFIG = {
   // 页面上不会列出这些名称，但 config.js 是公开文件，这里只写名称，不要写申请人信息
   pending: [],
 
-  // 访问统计（不蒜子，免注册）。留空 "" 即关闭
-  statsScript: "https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js",
+  // 访问统计（Vercount，免注册，兼容不蒜子）。留空 "" 即关闭
+  statsScript: "https://events.vercount.one/js",
 
-  // 实时在线人数（Supabase Realtime，免费）。按 README 创建项目后填入；留空则不显示
+  // 实时在线人数（Supabase Realtime，免费）。按 README 创建项目后填入 Project URL 和 Publishable key（或 anon key）；
+  // 这两个值本来就是公开给网页用的。千万不要填 secret / service_role key。留空则不显示在线人数
   supabaseUrl: "",
   supabaseKey: "",
 

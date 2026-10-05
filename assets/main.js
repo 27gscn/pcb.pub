@@ -7,8 +7,10 @@
   "use strict";
 
   var CFG = window.PCB_CONFIG || {};
+  var SELF = document.currentScript;
+  var ASSETS = (SELF && SELF.src ? SELF.src : "assets/main.js").replace(/main\.js(?:[?#].*)?$/, "");
   var I18N = window.PCB_I18N || { lang: "zh-CN", t: function () { return null; } };
-  var EMAIL = CFG.email || "tyzokaw@163.com";
+  var EMAIL = CFG.email || "tyzpkaw@163.com";
   var ZONE = "pcb.pub";
   var DEFAULT_LAUNCH = "2026-10-05T00:00:00+08:00";
   var LAUNCH = Date.parse(CFG.launch || DEFAULT_LAUNCH);
@@ -453,7 +455,7 @@
     }
   }
 
-  /* ---------- 访问统计（不蒜子） ---------- */
+  /* ---------- 访问统计（Vercount，沿用不蒜子的元素 id） ---------- */
 
   function initStats() {
     var groups = function (visible) {
@@ -515,7 +517,12 @@
       setText('[data-stat="online"]', num(Math.max(1, count)));
     }
 
-    loadScript("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2", function () {
+    // supabase-js 放在本站 assets/vendor/ 里，国内访问不依赖外部 CDN；本地文件加载失败时再试 jsDelivr
+    var localLib = ASSETS + "vendor/supabase.js";
+    var cdnLib = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js";
+    loadScript(localLib, start, function () { loadScript(cdnLib, start); });
+
+    function start() {
       var lib = window.supabase;
       if (!lib || !lib.createClient) return;
       try {
@@ -528,14 +535,23 @@
             show(true);
           })
           .subscribe(function (status) {
-            if (status === "SUBSCRIBED") channel.track({ at: Date.now() });
-            else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED") show(false);
+            if (status === "SUBSCRIBED") {
+              clearTimeout(giveUp);
+              channel.track({ at: Date.now() });
+            } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED") {
+              show(false);
+            }
           });
+        // 30 秒内连不上（比如项目被暂停、网络不通）就放弃，不再反复重连
+        var giveUp = setTimeout(function () {
+          try { client.removeChannel(channel); client.realtime.disconnect(); } catch (e) { /* 忽略 */ }
+          show(false);
+        }, 30000);
         on("pcb:lang", paint);
       } catch (e) {
         show(false);
       }
-    });
+    }
   }
 
   /* ---------- 飞过的信鸽 ---------- */
